@@ -1,0 +1,13 @@
+# Whitelist Mode
+/*
+
+# Git Files
+!.gitignore
+
+# Java Files
+!src/
+
+# Gradle Files
+!build.gradle
+!gradle.properties
+!settings.gradle
