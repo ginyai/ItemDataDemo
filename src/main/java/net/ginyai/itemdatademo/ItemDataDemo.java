@@ -74,6 +74,7 @@ public class ItemDataDemo {
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
         CommandSpec set = CommandSpec.builder()
+                .arguments(GenericArguments.integer(Text.of("int")))
                 .executor((src, args) -> {
                     if(!(src instanceof Player)){
                         throw new CommandException(Text.of("Player Only"));
@@ -95,7 +96,6 @@ public class ItemDataDemo {
                     }
                 }).build();
         CommandSpec check = CommandSpec.builder()
-                .arguments(GenericArguments.integer(Text.of("int")))
                 .executor((src, args) -> {
                     if(!(src instanceof Player)){
                         throw new CommandException(Text.of("Player Only"));
