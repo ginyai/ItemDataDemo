@@ -6,7 +6,11 @@ group = pluginGroup
 version = pluginVersion
 
 dependencies {
-    compile 'org.spongepowered:spongeapi:7.1.0-SNAPSHOT'
+    compile 'org.spongepowered:spongeapi:7.1.0'
 }
 
 sponge.plugin.id = pluginId
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}

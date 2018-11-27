@@ -2,16 +2,16 @@ package net.ginyai.itemdatademo;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Inject;
+import ninja.leaping.configurate.ConfigurationNode;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
-import org.spongepowered.api.data.DataQuery;
-import org.spongepowered.api.data.DataRegistration;
-import org.spongepowered.api.data.DataTransactionResult;
+import org.spongepowered.api.data.*;
 import org.spongepowered.api.data.key.Key;
+import org.spongepowered.api.data.persistence.DataTranslators;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.data.value.mutable.Value;
 import org.spongepowered.api.entity.living.player.Player;
@@ -19,6 +19,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.GameRegistryEvent;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.event.game.state.GameStateEvent;
+import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
@@ -27,6 +28,7 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.TypeTokens;
 import org.spongepowered.api.util.generator.dummy.DummyObjectProvider;
 
+import java.util.List;
 import java.util.Optional;
 
 @Plugin(
@@ -117,5 +119,18 @@ public class ItemDataDemo {
                 .build();
 
         Sponge.getCommandManager().register(this,main,"itemdatademo");
+
+        ItemStack itemStack = ItemStack.of(ItemTypes.APPLE,1);
+        SimpleIntegerData data = itemStack.getOrCreate(SimpleIntegerData.class).get();
+        data.set(KEY,1);
+        itemStack.offer(data);
+        DataContainer dataContainer = itemStack.toContainer();
+        logger.info("before:{}",dataContainer.toString());
+        logger.info(((List)dataContainer.get(DataQuery.of("Data")).get()).get(0).getClass().getSimpleName());
+        ConfigurationNode configurationNode = DataTranslators.CONFIGURATION_NODE.translate(dataContainer);
+        dataContainer = DataTranslators.CONFIGURATION_NODE.translate(configurationNode);
+        logger.info("after:{}",dataContainer.toString());
+        logger.info(((List)dataContainer.get(DataQuery.of("Data")).get()).get(0).getClass().getSimpleName());
+
     }
 }
